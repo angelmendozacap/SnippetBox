@@ -12,6 +12,10 @@ func main() {
 	mux.HandleFunc("/snippet", showSnippet)
 	mux.HandleFunc("/snippet/create", createSnippet)
 
+	fileServer := http.FileServer(http.Dir("./ui/static/"))
+
+	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+
 	log.Println("Server in :3030")
 	log.Fatal(http.ListenAndServe(":3030", mux))
 }
