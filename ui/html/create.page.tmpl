@@ -4,22 +4,34 @@
 
 {{define "main"}}
 <form action='/snippet/create' method='POST'>
-  <div>
-    <label for="title">Title:</label>
-    <input type='text' name='title' id="title">
-  </div>
-  <div>
-    <label for="content">Content:</label>
-    <textarea name='content' id="content"></textarea>
-  </div>
-  <div>
-    <span>Delete in:</span>
-    <input type='radio' id="oneYear" name='expiresAt' value='365' checked> <label for="oneYear">One Year</label>
-    <input type='radio' id="oneWeek" name='expiresAt' value='7'> <label for="oneWeek">One Week</label>
-    <input type='radio' id="oneDay" name='expiresAt' value='1'> <label for="oneDay">One Day</label>
-  </div>
-  <div>
-    <input type='submit' value='Publish snippet'>
-  </div>
+  {{with .Form}}
+    <div>
+      <label for="title">Title:</label>
+      {{with .Errors.Get "title"}}
+        <span class='error'>{{.}}</span>
+      {{end}}
+      <input type='text' name='title' id="title" value='{{.Get "title"}}'>
+    </div>
+    <div>
+      <label for="content">Content:</label>
+      {{with .Errors.Get "content"}}
+        <span class='error'>{{.}}</span>
+      {{end}}
+      <textarea name='content' id="content">{{.Get "content"}}</textarea>
+    </div>
+    <div>
+      <span>Delete in:</span>
+      {{with .Errors.Get "expiresAt"}}
+        <span class='error'>{{.}}</span>
+      {{end}}
+      {{$exp := or (.Get "expiresAt") "365"}}
+      <input type='radio' id="oneYear" name='expiresAt' value='365' {{if (eq $exp "365")}}checked{{end}}> <label for="oneYear">One Year</label>
+      <input type='radio' id="oneWeek" name='expiresAt' value='7' {{if (eq $exp "7")}}checked{{end}}> <label for="oneWeek">One Week</label>
+      <input type='radio' id="oneDay" name='expiresAt' value='1' {{if (eq $exp "1")}}checked{{end}}> <label for="oneDay">One Day</label>
+    </div>
+    <div>
+      <input type='submit' value='Publish snippet'>
+    </div>
+  {{end}}
 </form>
 {{end}}
