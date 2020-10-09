@@ -4,17 +4,19 @@
 
 {{define "main"}}
 <form action='/user/login' method='POST' novalidate>
+  <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
+
   {{with .Form}}
     {{with .Errors.Get "generic"}}
       <div class='error'>{{.}}</div>
     {{end}}
     <div>
-      <label id='email'>Email:</label>
-      <input type='email' name='email' value='{{.Get "email"}}'>
+      <label for='email'>Email:</label>
+      <input type='email' name='email' id='email' value='{{.Get "email"}}'>
     </div>
     <div>
-      <label id='password'>Password:</label>
-      <input type='password' name='password'>
+      <label for='password'>Password:</label>
+      <input type='password' name='password' id='password'>
     </div>
     <div>
       <input type='submit' value='Login'>
