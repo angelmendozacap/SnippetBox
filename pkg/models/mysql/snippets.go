@@ -13,7 +13,7 @@ type SnippetModel struct {
 }
 
 // Insert a new snippet into the database.
-func (m *SnippetModel) Insert(title, content, expiresAt string) (uint, error) {
+func (m *SnippetModel) Insert(title, content, expiresAt string) (int, error) {
 	stmt := `INSERT INTO snippets (title, content, expires_at)
 	VALUES (?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? DAY))`
 
@@ -27,11 +27,11 @@ func (m *SnippetModel) Insert(title, content, expiresAt string) (uint, error) {
 		return 0, err
 	}
 
-	return uint(id), nil
+	return int(id), nil
 }
 
 // Get returns a specific snippet based on its id.
-func (m *SnippetModel) Get(id uint) (*models.Snippet, error) {
+func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 	stmt := `SELECT id, title, content, created_at, expires_at FROM snippets
 	WHERE expires_at > NOW() AND id = ?`
 
