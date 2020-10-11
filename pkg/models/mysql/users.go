@@ -51,18 +51,16 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return 0, models.ErrInvalidCredentials
-		} else {
-			return 0, err
 		}
+		return 0, err
 	}
 
 	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(password))
 	if err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 			return 0, models.ErrInvalidCredentials
-		} else {
-			return 0, err
 		}
+		return 0, err
 	}
 
 	return id, nil
@@ -78,9 +76,9 @@ func (m *UserModel) Get(id int) (*models.User, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, models.ErrNoRecord
-		} else {
-			return nil, err
 		}
+
+		return nil, err
 	}
 
 	return u, nil
