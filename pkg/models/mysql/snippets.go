@@ -42,7 +42,7 @@ func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 
 	row := m.DB.QueryRow(stmt, id)
 
-	s := &models.Snippet{}
+	s := &models.Snippet{User: &models.User{}}
 
 	err := row.Scan(
 		&s.ID, &s.Title, &s.Content, &s.CreatedAt, &s.ExpiresAt,
