@@ -10,6 +10,7 @@
       <span>#{{.ID}}</span>
     </div>
     <pre><code>{{.Content}}</code></pre>
+    <p>{{.User.Name}}</p>
     <div class='metadata'>
       <time>Created: {{humanDate .CreatedAt}}</time>
       <time>Expires: {{humanDate .ExpiresAt}}</time>

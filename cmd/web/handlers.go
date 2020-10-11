@@ -68,7 +68,9 @@ func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := app.snippets.Insert(form.Get("title"), form.Get("content"), form.Get("expiresAt"))
+	userID := app.session.GetInt(r, "authenticatedUserID")
+
+	id, err := app.snippets.Insert(form.Get("title"), form.Get("content"), form.Get("expiresAt"), userID)
 	if err != nil {
 		app.serverError(w, err)
 		return

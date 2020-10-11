@@ -21,6 +21,7 @@ var (
 // Snippet is the DB model snippet
 type Snippet struct {
 	ID        uint
+	User      *User
 	Title     string
 	Content   string
 	CreatedAt time.Time

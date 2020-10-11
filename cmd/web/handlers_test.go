@@ -36,6 +36,7 @@ func TestShowSnippet(t *testing.T) {
 		wantBody []byte
 	}{
 		{"Valid ID", "/snippet/1", http.StatusOK, []byte("An old silent pond...")},
+		{"Valid ID with User", "/snippet/1", http.StatusOK, []byte("Alice")},
 		{"Non-existent ID", "/snippet/2", http.StatusNotFound, nil},
 		{"Negative ID", "/snippet/-1", http.StatusNotFound, nil},
 		{"Decimal ID", "/snippet/1.23", http.StatusNotFound, nil},
@@ -56,6 +57,40 @@ func TestShowSnippet(t *testing.T) {
 				t.Errorf("want body to contain %q", tt.wantBody)
 			}
 		})
+	}
+}
+
+func TestInsertSnippet(t *testing.T) {
+	app := newTestApplication(t)
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	_, _, body := ts.get(t, "/user/signup")
+	csrfToken := extractCSRFToken(t, body)
+
+	loginForm := url.Values{}
+	loginForm.Add("email", "alice@example.com")
+	loginForm.Add("password", "kick1930kick1930")
+	loginForm.Add("csrf_token", csrfToken)
+	code, _, _ := ts.postForm(t, "/user/login", loginForm)
+	if code != http.StatusSeeOther {
+		t.Errorf("want %d; got %d", http.StatusSeeOther, code)
+	}
+
+	form := url.Values{}
+	form.Add("title", "New Title")
+	form.Add("content", "Content")
+	form.Add("expiresAt", "365")
+	form.Add("csrf_token", csrfToken)
+
+	code, _, body = ts.postForm(t, "/snippet/create", form)
+
+	if code != http.StatusSeeOther {
+		t.Errorf("want %d; got %d", http.StatusSeeOther, code)
+	}
+
+	if !bytes.Contains(body, nil) {
+		t.Errorf("want body %s to contain %v", body, nil)
 	}
 }
 
