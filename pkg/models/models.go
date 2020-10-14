@@ -20,20 +20,20 @@ var (
 
 // Snippet is the DB model snippet
 type Snippet struct {
-	ID        uint
-	User      *User
-	Title     string
-	Content   string
-	CreatedAt time.Time
-	ExpiresAt time.Time
+	ID        uint       `json:"id"`
+	User      *User      `json:"user"`
+	Title     string     `json:"title"`
+	Content   string     `json:"content"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 }
 
 // User is the DB model user
 type User struct {
-	ID        int
-	Name      string
-	Email     string
-	Password  []byte
-	CreatedAt time.Time
-	IsActive  bool
+	ID        int        `json:"id"`
+	Name      string     `json:"name"`
+	Email     string     `json:"email"`
+	Password  []byte     `json:"-"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	IsActive  bool       `json:"is_active,omitempty"`
 }

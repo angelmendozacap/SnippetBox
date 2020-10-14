@@ -13,6 +13,9 @@ func TestUserModelGet(t *testing.T) {
 		t.Skip("mysql: skipping integration test.")
 	}
 
+	tm := &time.Time{}
+	*tm = time.Date(2018, 12, 23, 17, 25, 22, 0, time.UTC)
+
 	table := []struct {
 		name      string
 		userID    int
@@ -26,7 +29,7 @@ func TestUserModelGet(t *testing.T) {
 				ID:        1,
 				Name:      "Alice Jones",
 				Email:     "alice@example.com",
-				CreatedAt: time.Date(2018, 12, 23, 17, 25, 22, 0, time.UTC),
+				CreatedAt: tm,
 				IsActive:  true,
 			},
 			wantError: nil,

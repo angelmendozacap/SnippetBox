@@ -61,8 +61,13 @@ func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 
 // Latest returns the 10 most recently created snippets.
 func (m *SnippetModel) Latest() ([]*models.Snippet, error) {
-	stmt := `SELECT id, title, content, created_at, expires_at FROM snippets
-	WHERE expires_at > NOW() ORDER BY created_at DESC LIMIT 10`
+	stmt := `SELECT
+		s.id, s.title, s.content, s.created_at, s.expires_at,
+		u.id, u.name, u.email
+	FROM snippets s
+	INNER JOIN users u
+		ON u.id = s.user_id
+	WHERE s.expires_at > NOW() ORDER BY created_at DESC LIMIT 10`
 
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -70,12 +75,15 @@ func (m *SnippetModel) Latest() ([]*models.Snippet, error) {
 	}
 	defer rows.Close()
 
-	snippets := []*models.Snippet{}
+	snippets := make([]*models.Snippet, 0)
 
 	for rows.Next() {
-		s := &models.Snippet{}
+		s := &models.Snippet{User: &models.User{}}
 
-		err = rows.Scan(&s.ID, &s.Title, &s.Content, &s.CreatedAt, &s.ExpiresAt)
+		err = rows.Scan(
+			&s.ID, &s.Title, &s.Content, &s.CreatedAt, &s.ExpiresAt,
+			&s.User.ID, &s.User.Name, &s.User.Email,
+		)
 		if err != nil {
 			return nil, err
 		}

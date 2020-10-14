@@ -6,13 +6,15 @@ import (
 	"github.com/angelmendozacap/SnippetBox/pkg/models"
 )
 
+var tm = time.Now()
+
 var mockSnippet = &models.Snippet{
 	ID:        1,
 	User:      mockUser,
 	Title:     "An old silent pond",
 	Content:   "An old silent pond...",
-	CreatedAt: time.Now(),
-	ExpiresAt: time.Now(),
+	CreatedAt: &tm,
+	ExpiresAt: &tm,
 }
 
 type SnippetModel struct{}

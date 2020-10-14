@@ -1,8 +1,6 @@
 package mock
 
 import (
-	"time"
-
 	"github.com/angelmendozacap/SnippetBox/pkg/models"
 )
 
@@ -10,7 +8,7 @@ var mockUser = &models.User{
 	ID:        1,
 	Name:      "Alice",
 	Email:     "alice@example.com",
-	CreatedAt: time.Now(),
+	CreatedAt: &tm,
 	IsActive:  true,
 }
 
